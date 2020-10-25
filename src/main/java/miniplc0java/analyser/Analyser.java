@@ -447,11 +447,9 @@ public final class Analyser {
             nextIf(TokenType.Plus);
             negate = false;
         }
-
         if (check(TokenType.Ident)) {
 //            System.out.println("factor是标识符");
             // 是标识符
-
             // 加载标识符的值
             Token nameToken = expect(TokenType.Ident);
             String name = nameToken.getValueString();
@@ -469,10 +467,10 @@ public final class Analyser {
             instructions.add(new Instruction(Operation.LOD, offset));
         } else if (check(TokenType.Uint)) {
 //            System.out.println("factor是整数");
-            expect(TokenType.Uint);
+            Token intToken = expect(TokenType.Uint);
             // 是整数
             // 加载整数值
-            int value = 0;
+            int value = (int)intToken.getValue();
             instructions.add(new Instruction(Operation.LIT, value));
         } else if (check(TokenType.LParen)) {
 //            System.out.println("factor是表达式");
@@ -485,7 +483,6 @@ public final class Analyser {
             // 都不是，摸了
             throw new ExpectedTokenError(List.of(TokenType.Ident, TokenType.Uint, TokenType.LParen), next());
         }
-
         if (negate) {
             instructions.add(new Instruction(Operation.SUB));
         }
